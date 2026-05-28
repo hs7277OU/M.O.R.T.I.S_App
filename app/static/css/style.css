@@ -96,6 +96,32 @@ a:hover {
   box-shadow: 0 20px 55px rgba(0, 0, 0, 0.32);
 }
 
+.hero-text {
+  flex: 1;
+}
+
+.hero-text h1 {
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+.hero-text p {
+  max-width: 50%;
+  margin: 0;
+  color: var(--muted);
+}
+
+.hero-btn {
+  flex-shrink: 0;
+  margin-top: 0;
+  padding: 20px 32px;
+  font-size: 16px;
+  line-height: 1.4;
+  text-align: center;
+  white-space: normal;
+  width: 160px;
+}
+
 .narrow {
   max-width: 540px;
   margin: 40px auto;
@@ -253,13 +279,13 @@ tr:hover {
   display: inline-block;
   padding: 6px 10px;
   background: #334155;
-  color: #fff;
+  color: #ffffff;
   font-weight: 800;
   border-radius: 999px;
 }
 
-.badge.info     { background: #475569; }
-.badge.low      { background: #16a34a; }
-.badge.medium   { background: #ffe600; }
-.badge.high     { background: #dc2626; }
-.badge.critical { background: #7f1d1d; }
+.badge.info     { background: #475569; color: #ffffff; }
+.badge.low      { background: #16a34a; color: #ffffff; }
+.badge.medium   { background: #ffe600; color: #000000; }
+.badge.high     { background: #dc2626; color: #ffffff; }
+.badge.critical { background: #7f1d1d; color: #ffffff; }
