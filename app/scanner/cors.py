@@ -5,7 +5,7 @@ def check_cors(url: str, timeout: int = 8) -> list[dict]:
     findings = []
     evil_origin = "https://evil.example"
     try:
-        response = requests.get(url, timeout=timeout, allow_redirects=True, headers={"Origin": evil_origin, "User-Agent": "MORTIS-MVP/1.0"})
+        response = requests.get(url, timeout=timeout, allow_redirects=True, headers={"Origin": evil_origin, "User-Agent": "MORTIS-PROTOTYPE/1.0"})
     except requests.RequestException as exc:
         return [make_finding("CORS", "CORS check failed", "Medium", str(exc), "Confirm the target is reachable and retry.")]
 

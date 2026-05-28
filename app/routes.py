@@ -31,7 +31,7 @@ def login():
             session["user_id"] = user.id
             session["username"] = user.username
             return redirect(url_for("main.dashboard"))
-        flash("Invalid login. Default MVP login is admin / mortis123.", "error")
+        flash("Invalid login. Default Prototype login is admin / mortis123.", "error")
     return render_template("login.html")
 
 @bp.route("/logout")
@@ -86,8 +86,8 @@ def results(scan_id):
 def download_report(scan_id):
     scan_record = Scan.query.get_or_404(scan_id)
     lines = [
-        "MORTIS MVP Scan Report",
-        "======================",
+        "MORTIS Prototype Scan Report",
+        "=============================",
         f"Target: {scan_record.target_url}",
         f"Overall rating: {scan_record.overall_rating}",
         "",

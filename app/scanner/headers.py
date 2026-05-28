@@ -12,7 +12,7 @@ SECURITY_HEADERS = {
 def check_security_headers(url: str, timeout: int = 8) -> list[dict]:
     findings = []
     try:
-        response = requests.get(url, timeout=timeout, allow_redirects=True, headers={"User-Agent": "MORTIS-MVP/1.0"})
+        response = requests.get(url, timeout=timeout, allow_redirects=True, headers={"User-Agent": "MORTIS-PROTOTYPE/1.0"})
     except requests.RequestException as exc:
         return [make_finding("Security Headers", "Target could not be reached", "Medium", str(exc), "Confirm the URL is correct and reachable from this machine.")]
 

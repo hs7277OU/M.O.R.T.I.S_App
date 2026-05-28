@@ -1,8 +1,8 @@
 def generate_report(target_url: str, findings: list[dict], overall_rating: str) -> str:
-    """MVP report generator. Replace this with Claude/OpenAI API integration later."""
+    """Prototype report generator. Replace this with Claude/OpenAI API integration later."""
     risky = [f for f in findings if f.get("severity") in {"Medium", "High", "Critical"}]
     if not risky:
-        return f"MORTIS completed a baseline scan of {target_url}. No major issues were identified during this limited MVP scan. Further authenticated and deeper testing is still recommended."
+        return f"MORTIS completed a baseline scan of {target_url}. No major issues were identified during this limited prototype scan. Further authenticated and deeper testing is still recommended."
 
     top = sorted(risky, key=lambda f: f.get("score", 0), reverse=True)[:3]
     lines = [

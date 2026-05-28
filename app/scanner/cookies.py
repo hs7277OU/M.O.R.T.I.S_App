@@ -4,7 +4,7 @@ from .risk import make_finding
 def check_cookies(url: str, timeout: int = 8) -> list[dict]:
     findings = []
     try:
-        response = requests.get(url, timeout=timeout, allow_redirects=True, headers={"User-Agent": "MORTIS-MVP/1.0"})
+        response = requests.get(url, timeout=timeout, allow_redirects=True, headers={"User-Agent": "MORTIS-PROTOTYPE/1.0"})
     except requests.RequestException as exc:
         return [make_finding("Cookie Audit", "Cookie check failed", "Medium", str(exc), "Confirm the target is reachable and retry.")]
 
