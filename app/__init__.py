@@ -15,8 +15,15 @@ def create_app():
 
     with app.app_context():
         db.create_all()
-        if not User.query.filter_by(username="admin").first():
-            admin_user = User(username="admin", password_hash="admin")
+
+        dmin_user = User.query.filter_by(username="admin").first()
+
+        if not admin_user:
+            admin_user = User(username="admin")
+            admin_user.set_password("mortis123")
             db.session.add(admin_user)
+            db.session.commit()
+        elif not admin_user.check_password("mortis123"):
+            admin_user.set_password("mortis123")
             db.session.commit()
     return app
