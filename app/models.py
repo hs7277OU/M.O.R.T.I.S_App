@@ -4,6 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 db = SQLAlchemy()
 
+
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
@@ -15,6 +16,7 @@ class User(db.Model):
     def check_password(self, password: str) -> bool:
         return check_password_hash(self.password_hash, password)
 
+
 class Scan(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     target_url = db.Column(db.String(500), nullable=False)
@@ -22,14 +24,24 @@ class Scan(db.Model):
     overall_score = db.Column(db.Integer, default=0)
     overall_rating = db.Column(db.String(20), default="Low")
     report_summary = db.Column(db.Text, default="")
-    findings = db.relationship("Finding", backref="scan", cascade="all, delete-orphan", lazy=True)
 
-class Fiding(db.Model):
+    findings = db.relationship(
+        "Finding",
+        backref="scan",
+        cascade="all, delete-orphan",
+        lazy=True,
+        order_by="Finding.score.desc()"
+    )
+
+
+class Finding(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     scan_id = db.Column(db.Integer, db.ForeignKey("scan.id"), nullable=False)
+
     module = db.Column(db.String(80), nullable=False)
     title = db.Column(db.String(200), nullable=False)
     severity = db.Column(db.String(20), nullable=False)
     score = db.Column(db.Integer, default=0)
+
     description = db.Column(db.Text, nullable=False)
     recommendation = db.Column(db.Text, nullable=False)
