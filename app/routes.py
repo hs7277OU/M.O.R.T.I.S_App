@@ -59,6 +59,7 @@ def scan():
         except Exception as exc:
             flash(str(exc), "error")
             return redirect(url_for("main.scan"))
+
         report_summary = generate_report(result["target_url"], result["findings"], result["overall_rating"])
         scan_record = Scan(
             target_url=result["target_url"],
@@ -104,5 +105,4 @@ def download_report(scan_id):
             "",
         ])
     data = "\n".join(lines).encode("utf-8")
-    return send_file(io.BytesIO(data), as_attachment=True, download_name=f"mortis_report_{scan_id}.txt", 
-mimetype="text/plain")
+    return send_file(io.BytesIO(data), as_attachment=True, download_name=f"mortis_report_{scan_id}.txt", mimetype="text/plain")

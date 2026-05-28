@@ -14,7 +14,7 @@ class User(db.Model):
 
     def check_password(self, password: str) -> bool:
         return check_password_hash(self.password_hash, password)
-    
+
 class Scan(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     target_url = db.Column(db.String(500), nullable=False)
@@ -23,7 +23,7 @@ class Scan(db.Model):
     overall_rating = db.Column(db.String(20), default="Low")
     report_summary = db.Column(db.Text, default="")
     findings = db.relationship("Finding", backref="scan", cascade="all, delete-orphan", lazy=True)
-    
+
 class Finding(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     scan_id = db.Column(db.Integer, db.ForeignKey("scan.id"), nullable=False)

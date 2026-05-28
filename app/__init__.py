@@ -1,5 +1,5 @@
 from flask import Flask
-from .models import db, User 
+from .models import db, User
 
 def create_app():
     app = Flask(__name__, instance_relative_config=True)
@@ -15,15 +15,9 @@ def create_app():
 
     with app.app_context():
         db.create_all()
-
-        dmin_user = User.query.filter_by(username="admin").first()
-
-        if not admin_user:
-            admin_user = User(username="admin")
-            admin_user.set_password("mortis123")
-            db.session.add(admin_user)
-            db.session.commit()
-        elif not admin_user.check_password("mortis123"):
-            admin_user.set_password("mortis123")
+        if not User.query.filter_by(username="admin").first():
+            user = User(username="admin")
+            user.set_password("mortis123")
+            db.session.add(user)
             db.session.commit()
     return app
