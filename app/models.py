@@ -22,9 +22,9 @@ class Scan(db.Model):
     overall_score = db.Column(db.Integer, default=0)
     overall_rating = db.Column(db.String(20), default="Low")
     report_summary = db.Column(db.Text, default="")
-    findings = db.relationship("Finding", backref="scan", cascade="all, delete-orphan", lazy=True, order_by="desc(finding.score)")
+    findings = db.relationship("Finding", backref="scan", cascade="all, delete-orphan", lazy=True)
 
-class Finding(db.Model):
+class Fiding(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     scan_id = db.Column(db.Integer, db.ForeignKey("scan.id"), nullable=False)
     module = db.Column(db.String(80), nullable=False)
