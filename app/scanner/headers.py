@@ -1,3 +1,7 @@
+import requests
+from .risk import make_finding
+
+
 SECURITY_HEADERS = {
  "Content-Security-Policy": "Helps reduce cross-site scripting and content injection risk.",
  "Strict-Transport-Security": "Forces browsers to use HTTPS for future requests.",
@@ -16,12 +20,7 @@ def check_security_headers(url: str, timeout: int = 8) -> list[dict]:
     headers = response.headers
     for header, purpose in SECURITY_HEADERS.items():
         if header not in headers:
-            findings.append(make_finding(
-                "Security Headers",
-                f"Missing {header}",
-                "Medium" if header in {"Content-Security-Policy", "Strict-Transport-Security"} else "Low",
-                f"The response does not include {header}. {purpose}",
-                f"Configure the web server/application to send a suitable {header} value."
+            findings.append(make_finding("Security Headers", f"Missing {header}", "Medium" if header in {"Content-Security-Policy", "Strict-Transport-Security"} else "Low", f"The response does not include {header}. {purpose}", f"Configure the web server/application to send a suitable {header} value."
             ))
     server = headers.get("Server", "")
 
