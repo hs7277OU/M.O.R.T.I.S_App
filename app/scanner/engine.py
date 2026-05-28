@@ -9,9 +9,19 @@ from .risk import overall_rating
 def run_scan(target_url: str) -> dict:
     url = normalise_url(target_url)
     findings = []
+
     for module in (check_security_headers, check_tls, check_cookies, check_cors, check_basic_injection):
         findings.extend(module(url))
+
+    # Sort findings from most serious to least serious
+    findings = sorted(
+        findings,
+        key=lambda finding: finding.get("score",0),
+        reverse=True
+    )
+
     score, rating = overall_rating(findings)
+
     return {
         "target_url": url,
         "findings": findings,
