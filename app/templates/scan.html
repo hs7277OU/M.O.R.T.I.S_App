@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="card narrow">
+  <h1>New Authorised Scan</h1>
+  <p class="warning">Only scan systems you own or have explicit permission to test. Use DVWA, Juice Shop, or local test apps for coursework evidence.</p>
+  <form method="post">
+    <label>Target URL</label>
+    <input name="target_url" placeholder="https://example.com" required>
+    <label class="checkbox"><input type="checkbox" name="authorised" required> I confirm I am authorised to test this target.</label>
+    <button type="submit">Run Baseline Scan</button>
+  </form>
+</section>
+{% endblock %}

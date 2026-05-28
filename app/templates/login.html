@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="card narrow">
+  <h1>Login</h1>
+  <p class="muted">Default MVP account: <strong>admin</strong> / <strong>mortis123</strong></p>
+  <form method="post">
+    <label>Username</label>
+    <input name="username" required>
+    <label>Password</label>
+    <input name="password" type="password" required>
+    <button type="submit">Login</button>
+  </form>
+</section>
+{% endblock %}

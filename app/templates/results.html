@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="hero">
+  <div>
+    <h1>Scan Results</h1>
+    <p>{{ scan.target_url }}</p>
+  </div>
+  <div class="scorebox">
+    <span class="badge {{ scan.overall_rating|lower }}">{{ scan.overall_rating }}</span>
+    <strong>{{ scan.overall_score }}/10</strong>
+  </div>
+</section>
+
+<section class="card">
+  <h2>AI-Style Executive Summary</h2>
+  <pre class="summary">{{ scan.report_summary }}</pre>
+  <a class="button secondary" href="{{ url_for('main.download_report', scan_id=scan.id) }}">Download TXT Report</a>
+</section>
+
+<section class="card">
+  <h2>Findings</h2>
+  {% for f in scan.findings %}
+    <article class="finding">
+      <div class="finding-head">
+        <h3>{{ f.title }}</h3>
+        <span class="badge {{ f.severity|lower }}">{{ f.severity }}</span>
+      </div>
+      <p><strong>Module:</strong> {{ f.module }}</p>
+      <p>{{ f.description }}</p>
+      <p><strong>Recommendation:</strong> {{ f.recommendation }}</p>
+    </article>
+  {% endfor %}
+</section>
+{% endblock %}

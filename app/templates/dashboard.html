@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="hero">
+  <div>
+    <h1>Mapped Open-Route Threat Identification System</h1>
+    <p>AI-assisted web vulnerability scanner MVP for authorised testing and academic development evidence.</p>
+  </div>
+  <a class="button" href="{{ url_for('main.scan') }}">Start New Scan</a>
+</section>
+
+<section class="card">
+  <h2>Recent Scans</h2>
+  {% if scans %}
+  <table>
+    <thead><tr><th>Target</th><th>Date</th><th>Rating</th><th>Score</th><th></th></tr></thead>
+    <tbody>
+    {% for scan in scans %}
+      <tr>
+        <td>{{ scan.target_url }}</td>
+        <td>{{ scan.created_at.strftime('%d %b %Y %H:%M') }}</td>
+        <td><span class="badge {{ scan.overall_rating|lower }}">{{ scan.overall_rating }}</span></td>
+        <td>{{ scan.overall_score }}</td>
+        <td><a href="{{ url_for('main.results', scan_id=scan.id) }}">View</a></td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+    <p class="muted">No scans yet. Run your first authorised scan.</p>
+  {% endif %}
+</section>
+{% endblock %}
