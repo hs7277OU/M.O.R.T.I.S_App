@@ -23,3 +23,49 @@ Mapped Open-Route Threat Identification System: an open‑source, AI‑assisted 
 Username: `admin`  
 Password: `mortis123`
 
+Change these before any real deployment.
+
+## Setup
+
+```bash
+python -m venv .venv
+# Windows
+.venv\Scripts\activate
+# macOS/Linux
+source .venv/bin/activate
+
+pip install -r requirements.txt
+python run.py
+```
+Open: `http://127.0.0.1:5000`
+
+## Safe testing guidance
+
+Only scan systems you own or have explicit permission to test. For coursework evidence, use intentionally vulnerable local 
+targets such as DVWA or OWASP Juice Shop.
+
+## Suggested next development steps
+
+1. Replace the Prototype report generator in `app/reporting.py` with Claude/OpenAI API calls using environment variables.
+2. Add user registration and password reset.
+3. Add scan module toggles and configurable scan depth.
+4. Add HTML/PDF report export.
+5. Add deeper crawler-based input discovery.
+6. Add pytest coverage for each scanner module.
+
+## Project structure
+
+```text
+mortis_mvp/
+  app/
+    scanner/          # Modular scan checks
+    templates/        # Dashboard pages
+    static/css/       # Styling
+    models.py         # SQLite models
+    routes.py         # Flask routes
+    reporting.py      # AI-report scaffold
+  docs/evidence/      # Place screenshots for TM470 appendices
+  tests/              # Future pytest tests
+  run.py
+  requirements.txt
+```
