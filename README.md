@@ -1,8 +1,8 @@
-# M.O.R.T.I.S 
+# M.O.R.T.I.S Prototype v1
 
-Mapped Open-Route Threat Identification System: an open‑source, AI‑assisted web vulnerability scanner that identifies OWASP‑aligned issues, ranks them by severity, and generates clear natural‑language reports for developers, students, and security professionals.
+Mapped Open-Route Threat Identification System: a first working Flask prototype.
 
-## Current MORTIS features
+## Current Prototype features
 
 - Flask dashboard
 - Default login
@@ -28,25 +28,31 @@ Change these before any real deployment.
 ## Setup
 
 ```bash
+
 python -m venv .venv
+
 # Windows
+
 .venv\Scripts\activate
+
 # macOS/Linux
+
 source .venv/bin/activate
 
 pip install -r requirements.txt
+
 python run.py
 ```
+
 Open: `http://127.0.0.1:5000`
 
 ## Safe testing guidance
 
-Only scan systems you own or have explicit permission to test. For coursework evidence, use intentionally vulnerable local 
-targets such as DVWA or OWASP Juice Shop.
+Only scan systems you own or have explicit permission to test. For coursework evidence, use intentionally vulnerable local targets such as DVWA or OWASP Juice Shop.
 
 ## Suggested next development steps
 
-1. Replace the Prototype report generator in `app/reporting.py` with Claude/OpenAI API calls using environment variables.
+1. Replace the prototype report generator in `app/reporting.py` with Claude/OpenAI API calls using environment variables.
 2. Add user registration and password reset.
 3. Add scan module toggles and configurable scan depth.
 4. Add HTML/PDF report export.
@@ -56,7 +62,7 @@ targets such as DVWA or OWASP Juice Shop.
 ## Project structure
 
 ```text
-mortis_mvp/
+M.O.R.T.I.S_APP/
   app/
     scanner/          # Modular scan checks
     templates/        # Dashboard pages
