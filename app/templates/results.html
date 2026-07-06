@@ -20,7 +20,7 @@
       <span class="badge info">Offline summary</span>
     {% endif %}
   </h2>
-  <pre class="summary">{{ scan.report_summary | format_summary }}</pre>
+  <pre class="summary">{{ scan.report_summary | clean_summary }}</pre>
   <a class="button secondary" href="{{ url_for('main.download_report', scan_id=scan.id) }}">Download TXT Report</a>
   <a class="button secondary" href="{{ url_for('main.download_report_html', scan_id=scan.id) }}">Download HTML Report</a>
 </section>
