@@ -1,4 +1,6 @@
-🚨 **WARNING** THIS PROTOTYPE IS INTENDED TO BE EXECUTED LOCALLY AND TESTED AGAINST A SAFE VULNERABLE TARGET LIKE DVWA. DO NOT USE AGAINST UNAUTHORISED PUBLIC SYSTEMS!! 🚨
+**Warning:** run this prototype locally and only against a safe, deliberately
+vulnerable target such as DVWA. Do not use it against systems you do not own or
+have permission to test.
 
 # M.O.R.T.I.S Prototype v1
 
@@ -17,7 +19,7 @@ Mapped Open-Route Threat Identification System: a first working Flask prototype.
 - CORS misconfiguration check
 - Basic non-destructive injection smoke test
 - OWASP-style severity labels and risk score, plus real CVSS v3.1 base scores
-- AI-style report scaffold (live Claude summary when `ANTHROPIC_API_KEY` is set)
+- Executive summary report (optional LLM summary when `ANTHROPIC_API_KEY` is set)
 - Downloadable TXT and HTML scan reports
 - Configurable scan depth and per-module toggles
 - Real-time scan progress bar
@@ -71,7 +73,7 @@ M.O.R.T.I.S_APP/
     static/css/       # Styling
     models.py         # SQLite models
     routes.py         # Flask routes
-    reporting.py      # AI-report scaffold
+    reporting.py      # Executive summary generation
   docs/evidence/      # Place screenshots for TM470 appendices
   tests/              # Future pytest tests
   run.py

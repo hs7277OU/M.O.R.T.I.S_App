@@ -44,7 +44,6 @@ def logout():
 
 @bp.route("/accessibility")
 def accessibility():
-    # Public page so anyone can reach the accessibility statement without logging in.
     return render_template("accessibility.html")
 
 @bp.route("/dashboard")
@@ -54,9 +53,8 @@ def dashboard():
     return render_template("dashboard.html", scans=scans)
 
 def _execute_scan(app, scan_id, target_url, enabled_modules, depth):
-    """Runs in a background thread: performs the scan and updates the Scan
-    row's progress fields as each module completes, so the progress page can
-    poll for real-time status (RE8).
+    """Run the scan in a background thread, updating the Scan row's progress
+    fields as each module completes so the progress page can poll for status.
     """
     with app.app_context():
         def on_progress(module_name, done, total):
