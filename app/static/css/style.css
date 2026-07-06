@@ -152,6 +152,13 @@ a:hover {
   border-radius: 10px;
 }
 
+/* Success/info messages must not look like errors: colour is not the only cue. */
+.alert.success {
+  color: #dcfce7;
+  background: rgba(6, 78, 41, 0.92);
+  border: 1px solid rgba(34, 197, 94, 0.45);
+}
+
 .scorebox {
   display: grid;
   gap: 10px;
@@ -193,6 +200,9 @@ input:focus {
 
 .checkbox input {
   width: auto;
+  /* Enlarge native checkboxes toward the 24x24px minimum target size. */
+  width: 22px;
+  height: 22px;
 }
 
 button,
@@ -200,7 +210,8 @@ button,
   display: inline-block;
   margin-top: 18px;
   padding: 12px 18px;
-  background: linear-gradient(135deg, var(--accent-2), #15803d);
+  /* Darker green so white text meets the 4.5:1 contrast minimum. */
+  background: linear-gradient(135deg, #15803d, #0f5c2e);
   color: #ffffff;
   font-weight: 800;
   border: 0;
@@ -259,9 +270,9 @@ tr:hover {
 }
 
 .badge.info     { background: #475569; color: #ffffff; }
-.badge.low      { background: #16a34a; color: #ffffff; }
+.badge.low      { background: #0f6b32; color: #ffffff; }
 .badge.medium   { background: #ffe600; color: #000000; }
-.badge.high     { background: #dc5126; color: #ffffff; }
+.badge.high     { background: #b23a17; color: #ffffff; }
 .badge.critical { background: #7f1d1d; color: #ffffff; }
 .badge.cvss     { background: #1e3a8a; color: #ffffff; font-weight: 700; }
 
@@ -304,4 +315,42 @@ fieldset .checkbox {
   height: 100%;
   background: linear-gradient(135deg, var(--accent-2), #15803d);
   transition: width 0.4s ease;
+}
+
+/* Clear, high-contrast focus indicator for all keyboard-focusable controls. */
+a:focus-visible,
+button:focus-visible,
+.button:focus-visible,
+select:focus-visible,
+input:focus-visible,
+[type="checkbox"]:focus-visible {
+  outline: 3px solid #fde047;
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* Skip link: hidden until focused, then visible at the top of the page. */
+.skip-link {
+  position: absolute;
+  left: 12px;
+  top: -48px;
+  z-index: 1000;
+  padding: 10px 16px;
+  background: #fde047;
+  color: #050807;
+  font-weight: 800;
+  border-radius: 8px;
+  transition: top 0.15s ease;
+}
+
+.skip-link:focus {
+  top: 12px;
+  color: #050807;
+  text-decoration: none;
+}
+
+/* Give top-bar nav links a larger, easier-to-hit target area. */
+.topbar nav a {
+  display: inline-block;
+  padding: 8px 6px;
 }

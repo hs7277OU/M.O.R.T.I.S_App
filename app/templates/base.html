@@ -3,25 +3,27 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>MORTIS Prototype</title>
+  <title>{% block title %}MORTIS Prototype{% endblock %}</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
+  <a class="skip-link" href="#main">Skip to main content</a>
   <header class="topbar">
     <div class="brand">M.O.R.T.I.S</div>
-    <nav>
+    <nav aria-label="Primary">
       {% if session.get('user_id') %}
         <a href="{{ url_for('main.dashboard') }}">Dashboard</a>
         <a href="{{ url_for('main.scan') }}">New Scan</a>
         <a href="{{ url_for('main.logout') }}">Logout</a>
       {% endif %}
+      <a href="{{ url_for('main.accessibility') }}">Accessibility</a>
     </nav>
   </header>
-  <main class="container">
+  <main class="container" id="main" tabindex="-1">
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
         {% for category, message in messages %}
-          <div class="alert {{ category }}">{{ message }}</div>
+          <div class="alert {{ category }}" role="alert">{{ message }}</div>
         {% endfor %}
       {% endif %}
     {% endwith %}

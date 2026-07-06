@@ -1,14 +1,15 @@
 {% extends "base.html" %}
+{% block title %}Login · MORTIS{% endblock %}
 {% block content %}
 <section class="card narrow">
   <h1>Login</h1>
   <p class="muted">Default Prototype account: <strong>admin</strong> / <strong>mortis123</strong></p>
   <form method="post">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-    <label>Username</label>
-    <input name="username" required>
-    <label>Password</label>
-    <input name="password" type="password" required>
+    <label for="username">Username</label>
+    <input id="username" name="username" autocomplete="username" required>
+    <label for="password">Password</label>
+    <input id="password" name="password" type="password" autocomplete="current-password" required>
     <button type="submit">Login</button>
   </form>
 </section>

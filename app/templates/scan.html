@@ -1,14 +1,15 @@
 {% extends "base.html" %}
+{% block title %}New Scan · MORTIS{% endblock %}
 {% block content %}
 <section class="card narrow">
   <h1>New Authorised Scan</h1>
   <p class="warning">Only scan systems you own or have explicit permission to test. Use DVWA, Juice Shop, or local test apps for coursework evidence.</p>
   <form method="post" onsubmit="return validateModules(this);">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-    <label>Target URL</label>
-    <input name="target_url" placeholder="https://example.com" required>
-    <label>Scan depth</label>
-    <select name="depth">
+    <label for="target_url">Target URL</label>
+    <input id="target_url" name="target_url" placeholder="https://example.com" required>
+    <label for="depth">Scan depth</label>
+    <select id="depth" name="depth">
       <option value="standard" selected>Standard (all checks)</option>
       <option value="quick">Quick (headers, TLS, cookies, CORS only)</option>
     </select>

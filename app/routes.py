@@ -42,6 +42,11 @@ def logout():
     session.clear()
     return redirect(url_for("main.login"))
 
+@bp.route("/accessibility")
+def accessibility():
+    # Public page so anyone can reach the accessibility statement without logging in.
+    return render_template("accessibility.html")
+
 @bp.route("/dashboard")
 @login_required
 def dashboard():

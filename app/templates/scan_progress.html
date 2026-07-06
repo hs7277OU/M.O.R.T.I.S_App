@@ -1,13 +1,20 @@
 {% extends "base.html" %}
+{% block title %}Scanning · MORTIS{% endblock %}
 {% block content %}
 <section class="card narrow">
   <h1>Scanning {{ scan.target_url }}</h1>
   <p class="muted">MORTIS is running the selected checks. This page updates automatically.</p>
 
-  <div class="progress-track">
+  <div class="progress-track"
+       id="progress-bar"
+       role="progressbar"
+       aria-label="Scan progress"
+       aria-valuemin="0"
+       aria-valuemax="100"
+       aria-valuenow="0">
     <div class="progress-fill" id="progress-fill" style="width: 0%;"></div>
   </div>
-  <p id="progress-label">Starting…</p>
+  <p id="progress-label" aria-live="polite">Starting…</p>
 
   <p id="progress-error" class="alert error" style="display:none;"></p>
 </section>
@@ -16,6 +23,7 @@
 (function () {
   const statusUrl = "{{ url_for('main.scan_status', scan_id=scan.id) }}";
   const fill = document.getElementById("progress-fill");
+  const bar = document.getElementById("progress-bar");
   const label = document.getElementById("progress-label");
   const errorBox = document.getElementById("progress-error");
 
@@ -27,6 +35,7 @@
         const done = data.modules_done || 0;
         const percent = total > 0 ? Math.round((done / total) * 100) : 0;
         fill.style.width = percent + "%";
+        bar.setAttribute("aria-valuenow", percent);
 
         if (data.status === "completed") {
           label.textContent = "Scan complete. Redirecting…";

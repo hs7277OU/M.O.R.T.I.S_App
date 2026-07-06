@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Accessibility Statement · MORTIS{% endblock %}
+{% block content %}
+<section class="card">
+  <h1>Accessibility Statement</h1>
+  <p>
+    MORTIS (Mapped Open-Route Threat Identification System) is committed to making
+    this application usable by as many people as possible, including those who rely
+    on assistive technologies such as screen readers, keyboard navigation, and
+    browser zoom.
+  </p>
+
+  <h2>Conformance status</h2>
+  <p>
+    This prototype aims to meet the
+    <strong>Web Content Accessibility Guidelines (WCAG) 2.2 Level AA</strong>.
+    As a prototype under active development it may not yet fully satisfy every
+    success criterion, and we welcome reports of any barriers you encounter.
+  </p>
+
+  <h2>Measures we have taken</h2>
+  <p>The following measures are built into the application:</p>
+  <ul>
+    <li>Semantic HTML (native buttons, form controls, headings, tables and landmarks).</li>
+    <li>Form fields with explicit, programmatically associated labels.</li>
+    <li>A colour palette chosen to meet the 4.5:1 minimum text contrast ratio.</li>
+    <li>Clearly visible keyboard focus indicators on all interactive controls.</li>
+    <li>A "Skip to main content" link for keyboard and screen-reader users.</li>
+    <li>A scan progress bar exposed to assistive technology via ARIA.</li>
+    <li>Content that reflows and remains usable at up to 200% zoom.</li>
+  </ul>
+
+  <h2>Reporting an accessibility problem</h2>
+  <p>
+    If you find any part of this application difficult to use, please let us know so
+    we can put it right. Email
+    <a href="mailto:harryrsmith00@gmail.com">harryrsmith00@gmail.com</a>
+    with a description of the problem, the page it occurred on, and the assistive
+    technology or browser you were using. We aim to respond within five working days.
+  </p>
+</section>
+{% endblock %}
