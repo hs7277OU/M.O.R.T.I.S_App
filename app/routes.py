@@ -5,7 +5,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, sessio
 from .models import db, User, Scan, Finding
 from .scanner.engine import run_scan
 from .scanner.utils import normalise_url
-from .reporting import generate_report_with_source
+from .reporting import generate_report_with_source, _strip_markdown
 import io
 
 bp = Blueprint("main", __name__)
@@ -159,7 +159,7 @@ def download_report(scan_id):
         f"Target: {scan_record.target_url}",
         f"Overall rating: {scan_record.overall_rating}",
         "",
-        scan_record.report_summary,
+        _strip_markdown(scan_record.report_summary or ""),
         "",
         "Findings",
         "--------",
