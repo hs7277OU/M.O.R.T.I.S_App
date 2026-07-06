@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(where python *)",
+      "Bash(where py *)",
+      "Read(//c/Users/Harry/AppData/Local/Python/pythoncore-3.14-64//**)",
+      "Bash(\"/c/Users/Harry/AppData/Local/Python/pythoncore-3.14-64/python.exe\" --version)",
+      "Bash(/c/Users/Harry/AppData/Local/Python/pythoncore-3.14-64/python.exe -c ' *)",
+      "Bash(\"/c/Users/Harry/AppData/Local/Python/pythoncore-3.14-64/python.exe\" -m venv .venv_check)",
+      "Bash(./.venv_check/Scripts/python.exe -m pip install -q -r requirements.txt)",
+      "Bash(./.venv_check/Scripts/python.exe -m pytest -q)",
+      "Bash(./.venv_check/Scripts/python.exe -c ' *)",
+      "Read(//c/Users/Harry/Desktop/M.O.R.T.I.S_App - Main copy (Only make changes that work)/**)",
+      "Read(//c//**)",
+      "Bash(./.venv/Scripts/python.exe -c ' *)"
+    ]
+  }
+}

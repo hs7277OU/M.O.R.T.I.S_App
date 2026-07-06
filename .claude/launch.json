@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "mortis-flask",
+      "runtimeExecutable": "C:\\Users\\Harry\\Desktop\\M.O.R.T.I.S_App - Main copy (Only make changes that work)\\.venv\\Scripts\\python.exe",
+      "runtimeArgs": ["run.py"],
+      "port": 5000
+    }
+  ]
+}
