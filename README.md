@@ -22,7 +22,6 @@ Mapped Open-Route Threat Identification System: a first working Flask prototype.
 - Configurable scan depth and per-module toggles
 - Real-time scan progress bar
 
-
 ## Default login
 
 Username: `admin`  
@@ -57,12 +56,10 @@ Only scan systems you own or have explicit permission to test. For coursework ev
 
 ## Suggested next development steps
 
-1. Replace the prototype report generator in `app/reporting.py` with Claude/OpenAI API calls using environment variables.
-2. Add user registration and password reset.
-3. Add scan module toggles and configurable scan depth.
-4. Add HTML/PDF report export.
-5. Add deeper crawler-based input discovery.
-6. Add pytest coverage for each scanner module.
+1. Add user registration and password reset.
+2. Add PDF report export (currently: open the HTML report and "Print → Save as PDF").
+3. Add deeper crawler-based input discovery.
+4. Add pytest coverage for the new engine toggles/progress endpoints.
 
 ## Project structure
 
