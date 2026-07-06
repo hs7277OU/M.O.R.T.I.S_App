@@ -12,9 +12,11 @@ def check_cors(url: str, timeout: int = 8) -> list[dict]:
     acao = response.headers.get("Access-Control-Allow-Origin", "")
     acac = response.headers.get("Access-Control-Allow-Credentials", "")
     if acao == "*":
-        findings.append(make_finding("CORS", "Wildcard CORS policy", "Medium", "Access-Control-Allow-Origin is set to *, which may expose responses to any origin.", "Restrict CORS to trusted origins only."))
+        findings.append(make_finding("CORS", "Wildcard CORS policy", "Medium", "Access-Control-Allow-Origin is set to *, which may expose responses to any origin.", "Restrict CORS to trusted origins only.",
+                                     cvss_vector="AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N"))
     if acao == evil_origin and acac.lower() == "true":
-        findings.append(make_finding("CORS", "Reflected origin with credentials", "High", "The application reflected an untrusted Origin and allows credentials.", "Use an allow-list of trusted origins and avoid credentialed wildcard/reflected CORS."))
+        findings.append(make_finding("CORS", "Reflected origin with credentials", "High", "The application reflected an untrusted Origin and allows credentials.", "Use an allow-list of trusted origins and avoid credentialed wildcard/reflected CORS.",
+                                     cvss_vector="AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N"))
     if not findings:
         findings.append(make_finding("CORS", "No obvious CORS misconfiguration detected", "Info", "The initial response did not expose a risky CORS configuration.", "Review authenticated/API endpoints separately during deeper testing."))
     return findings
