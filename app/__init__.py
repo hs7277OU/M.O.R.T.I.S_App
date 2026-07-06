@@ -38,10 +38,10 @@ def create_app():
     from .routes import bp
     app.register_blueprint(bp)
 
-    # Clean any Markdown out of stored summaries when they are displayed, so
-    # older scans (saved before summaries were sanitised) also render cleanly.
-    from .reporting import _strip_markdown
-    app.add_template_filter(_strip_markdown, "clean_summary")
+    # Render stored summaries (Markdown headings/bold + AI disclaimer) as safe
+    # HTML when displayed, so every scan formats consistently.
+    from .reporting import format_summary
+    app.add_template_filter(format_summary, "format_summary")
 
     with app.app_context():
         db.create_all()
