@@ -68,7 +68,8 @@ def _llm_summary(target_url: str, findings: list[dict], overall_rating: str, api
 
     message = client.messages.create(
         model=os.environ.get("MORTIS_LLM_MODEL", "claude-sonnet-5"),
-        max_tokens=800,
+        # Headroom so the summary + remediation steps are not truncated mid-sentence.
+        max_tokens=int(os.environ.get("MORTIS_LLM_MAX_TOKENS", "2000")),
         system=(
             "You are a security report writer for a tool called MORTIS. Turn the "
             "supplied vulnerability findings into a concise executive summary that a "
