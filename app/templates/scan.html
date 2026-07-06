@@ -3,7 +3,7 @@
 <section class="card narrow">
   <h1>New Authorised Scan</h1>
   <p class="warning">Only scan systems you own or have explicit permission to test. Use DVWA, Juice Shop, or local test apps for coursework evidence.</p>
-  <form method="post">
+  <form method="post" onsubmit="return validateModules(this);">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
     <label>Target URL</label>
     <input name="target_url" placeholder="https://example.com" required>
@@ -25,4 +25,14 @@
     <button type="submit">Run Baseline Scan</button>
   </form>
 </section>
+<script>
+  function validateModules(form) {
+    var checked = form.querySelectorAll('input[name="modules"]:checked');
+    if (checked.length === 0) {
+      alert("You must select at least one scan module to run a scan.");
+      return false;
+    }
+    return true;
+  }
+</script>
 {% endblock %}

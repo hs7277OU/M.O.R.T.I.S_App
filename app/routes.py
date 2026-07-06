@@ -85,10 +85,13 @@ def scan():
     if request.method == "POST":
         target_url = request.form.get("target_url", "")
         authorised = request.form.get("authorised") == "on"
-        selected_modules = request.form.getlist("modules") or None
+        selected_modules = request.form.getlist("modules")
         depth = request.form.get("depth", "standard")
         if not authorised:
             flash("You must confirm that you are authorised to test this target.", "error")
+            return redirect(url_for("main.scan"))
+        if not selected_modules:
+            flash("You must select at least one scan module to run a scan.", "error")
             return redirect(url_for("main.scan"))
         try:
             target_url = normalise_url(target_url)
