@@ -66,6 +66,13 @@ def _execute_scan(app, scan_id, target_url, enabled_modules, depth):
 
         try:
             result = run_scan(target_url, enabled_modules=enabled_modules, depth=depth, on_progress=on_progress)
+
+            # Modules are done; the summary (possibly a slow API call) is next.
+            # Flag this phase so the progress page can show "generating report".
+            scan_record = db.session.get(Scan, scan_id)
+            scan_record.status = "reporting"
+            db.session.commit()
+
             report_summary, report_source = generate_report_with_source(
                 result["target_url"], result["findings"], result["overall_rating"])
 
@@ -118,7 +125,7 @@ def scan():
 @login_required
 def scan_progress(scan_id):
     scan_record = Scan.query.get_or_404(scan_id)
-    if scan_record.status != "running":
+    if scan_record.status not in ("running", "reporting"):
         return redirect(url_for("main.results", scan_id=scan_id))
     return render_template("scan_progress.html", scan=scan_record)
 
@@ -138,7 +145,7 @@ def scan_status(scan_id):
 @login_required
 def results(scan_id):
     scan_record = Scan.query.get_or_404(scan_id)
-    if scan_record.status == "running":
+    if scan_record.status in ("running", "reporting"):
         return redirect(url_for("main.scan_progress", scan_id=scan_id))
     return render_template("results.html", scan=scan_record)
 

@@ -27,7 +27,7 @@ class Scan(db.Model):
     report_source = db.Column(db.String(20), default="")  # "api" | "offline" | ""
 
     # Progress fields updated by the background scan thread and polled by the UI.
-    status = db.Column(db.String(20), default="running")  # running | completed | failed
+    status = db.Column(db.String(20), default="running")  # running | reporting | completed | failed
     modules_total = db.Column(db.Integer, default=0)
     modules_done = db.Column(db.Integer, default=0)
     current_module = db.Column(db.String(80), default="")

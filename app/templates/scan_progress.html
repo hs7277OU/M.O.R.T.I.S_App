@@ -49,6 +49,13 @@
           window.location.href = data.results_url;
           return;
         }
+        if (data.status === "reporting") {
+          fill.style.width = "100%";
+          bar.setAttribute("aria-valuenow", 100);
+          label.textContent = "Scan complete — generating AI report…";
+          setTimeout(poll, 1000);
+          return;
+        }
 
         label.textContent = data.current_module
           ? `Running module: ${data.current_module} (${done}/${total})`
