@@ -27,8 +27,13 @@ def _strip_markdown(text: str) -> str:
     return text.rstrip()
 
 
-def _local_summary(target_url: str, findings: list[dict], overall_rating: str) -> str:
-    """Deterministic, offline summary. Also used as a fallback for the LLM."""
+def _local_summary(target_url: str, findings: list[dict], overall_rating: str,
+                   style: str = "basic") -> str:
+    """Deterministic, offline summary. Also used as a fallback for the LLM.
+
+    ``style`` is either "basic" (plain-language overview) or "technical"
+    (includes CVSS scores/vectors and lists every risky finding).
+    """
     risky = [f for f in findings if f.get("severity") in {"Medium", "High", "Critical"}]
     if not risky:
         return (
@@ -37,14 +42,22 @@ def _local_summary(target_url: str, findings: list[dict], overall_rating: str) -
             "deeper testing is still recommended."
         )
 
-    top = sorted(risky, key=lambda f: f.get("score", 0), reverse=True)[:3]
+    technical = style == "technical"
+    items = sorted(risky, key=lambda f: f.get("score", 0), reverse=True)
+    if not technical:
+        items = items[:3]
+
     lines = [
         f"MORTIS completed a baseline scan of {target_url}.",
         f"Overall risk rating: {overall_rating}.",
-        "The most important issues to review are:",
+        "The most important issues to review are:" if not technical
+        else "Technical findings, most severe first:",
     ]
-    for item in top:
-        lines.append(f"- {item['title']} ({item['severity']}): {item['recommendation']}")
+    for item in items:
+        line = f"- {item['title']} ({item['severity']}): {item['recommendation']}"
+        if technical and item.get("cvss_score") is not None:
+            line += f" [CVSS {item['cvss_score']} {item.get('cvss_vector', '')}]"
+        lines.append(line)
     lines.append(
         "This report is an initial draft and should be reviewed by a human tester "
         "before being used in a formal penetration-testing report."
@@ -52,33 +65,56 @@ def _local_summary(target_url: str, findings: list[dict], overall_rating: str) -
     return "\n".join(lines)
 
 
-def _llm_summary(target_url: str, findings: list[dict], overall_rating: str, api_key: str) -> str:
-    """Ask Claude to turn the findings into a clear, non-technical summary.
+_FORMAT_RULES = (
+    "Do not invent findings that are not listed. "
+    "Write in plain prose only. Do not use any Markdown formatting: no '#' "
+    "headings, no '**' or '*' for emphasis, and no backticks. Use short "
+    "paragraphs, and if you list items, start each line with '- '."
+)
 
-    Only non-sensitive finding metadata is transmitted (never raw scan bodies,
+_SYSTEM_BASIC = (
+    "You are a security report writer for a tool called MORTIS. Turn the "
+    "supplied vulnerability findings into a concise executive summary that a "
+    "non-technical reader can understand, followed by clear remediation steps. "
+    + _FORMAT_RULES
+)
+
+_SYSTEM_TECHNICAL = (
+    "You are a security report writer for a tool called MORTIS writing for "
+    "security practitioners. For each significant finding, explain the underlying "
+    "weakness, its potential impact, and specific technical remediation steps. "
+    "Reference the CVSS severity and vector where provided, and cite relevant "
+    "standards (such as OWASP) where appropriate. "
+    + _FORMAT_RULES
+)
+
+
+def _llm_summary(target_url: str, findings: list[dict], overall_rating: str,
+                 api_key: str, style: str = "basic") -> str:
+    """Ask Claude to turn the findings into a summary.
+
+    ``style`` selects a "basic" (non-technical) or "technical" tone. Only
+    non-sensitive finding metadata is transmitted (never raw scan bodies,
     cookies or tokens).
     """
     import anthropic
 
+    technical = style == "technical"
     client = anthropic.Anthropic(api_key=api_key)
-    finding_lines = "\n".join(
-        f"- {f.get('title')} ({f.get('severity')}): {f.get('description')}"
-        for f in findings
-    ) or "- No findings recorded."
+
+    def _line(f):
+        base = f"- {f.get('title')} ({f.get('severity')}): {f.get('description')}"
+        if technical and f.get("cvss_score") is not None:
+            base += f" [CVSS {f.get('cvss_score')} {f.get('cvss_vector', '')}]"
+        return base
+
+    finding_lines = "\n".join(_line(f) for f in findings) or "- No findings recorded."
 
     message = client.messages.create(
         model=os.environ.get("MORTIS_LLM_MODEL", "claude-sonnet-5"),
         # Headroom so the summary + remediation steps are not truncated mid-sentence.
         max_tokens=int(os.environ.get("MORTIS_LLM_MAX_TOKENS", "2000")),
-        system=(
-            "You are a security report writer for a tool called MORTIS. Turn the "
-            "supplied vulnerability findings into a concise executive summary that a "
-            "non-technical reader can understand, followed by clear remediation steps. "
-            "Do not invent findings that are not listed. "
-            "Write in plain prose only. Do not use any Markdown formatting: no '#' "
-            "headings, no '**' or '*' for emphasis, and no backticks. Use short "
-            "paragraphs, and if you list items, start each line with '- '."
-        ),
+        system=_SYSTEM_TECHNICAL if technical else _SYSTEM_BASIC,
         messages=[{
             "role": "user",
             "content": (
@@ -93,21 +129,23 @@ def _llm_summary(target_url: str, findings: list[dict], overall_rating: str, api
 
 
 def generate_report_with_source(target_url: str, findings: list[dict],
-                                overall_rating: str) -> tuple[str, str]:
+                                overall_rating: str, style: str = "basic") -> tuple[str, str]:
     """Return (summary, source), where source is "api" when the LLM produced the
-    summary or "offline" when the local fallback was used.
+    summary or "offline" when the local fallback was used. ``style`` is "basic"
+    or "technical".
     """
     api_key = os.environ.get("ANTHROPIC_API_KEY")
     if not api_key:
-        return _local_summary(target_url, findings, overall_rating), "offline"
+        return _local_summary(target_url, findings, overall_rating, style), "offline"
     try:
-        return _llm_summary(target_url, findings, overall_rating, api_key), "api"
+        return _llm_summary(target_url, findings, overall_rating, api_key, style), "api"
     except Exception:
         # Graceful degradation: never let a reporting/API error break a scan.
-        return _local_summary(target_url, findings, overall_rating), "offline"
+        return _local_summary(target_url, findings, overall_rating, style), "offline"
 
 
-def generate_report(target_url: str, findings: list[dict], overall_rating: str) -> str:
+def generate_report(target_url: str, findings: list[dict], overall_rating: str,
+                    style: str = "basic") -> str:
     """Return just the executive summary text (used where the source is not needed)."""
-    summary, _ = generate_report_with_source(target_url, findings, overall_rating)
+    summary, _ = generate_report_with_source(target_url, findings, overall_rating, style)
     return summary

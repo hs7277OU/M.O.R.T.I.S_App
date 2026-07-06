@@ -62,7 +62,7 @@ def clear_history():
     flash("Scan history cleared.", "success")
     return redirect(url_for("main.dashboard"))
 
-def _execute_scan(app, scan_id, target_url, enabled_modules, depth):
+def _execute_scan(app, scan_id, target_url, enabled_modules, depth, summary_style="basic"):
     """Run the scan in a background thread, updating the Scan row's progress
     fields as each module completes so the progress page can poll for status.
     """
@@ -84,7 +84,8 @@ def _execute_scan(app, scan_id, target_url, enabled_modules, depth):
             db.session.commit()
 
             report_summary, report_source = generate_report_with_source(
-                result["target_url"], result["findings"], result["overall_rating"])
+                result["target_url"], result["findings"], result["overall_rating"],
+                style=summary_style)
 
             scan_record = db.session.get(Scan, scan_id)
             scan_record.overall_score = result["overall_score"]
@@ -109,6 +110,7 @@ def scan():
         authorised = request.form.get("authorised") == "on"
         selected_modules = request.form.getlist("modules")
         depth = request.form.get("depth", "standard")
+        summary_style = "technical" if request.form.get("summary_style") == "technical" else "basic"
         if not authorised:
             flash("You must confirm that you are authorised to test this target.", "error")
             return redirect(url_for("main.scan"))
@@ -126,7 +128,9 @@ def scan():
         db.session.commit()
 
         app = current_app._get_current_object()
-        Thread(target=_execute_scan, args=(app, scan_record.id, target_url, selected_modules, depth), daemon=True).start()
+        Thread(target=_execute_scan,
+               args=(app, scan_record.id, target_url, selected_modules, depth, summary_style),
+               daemon=True).start()
 
         return redirect(url_for("main.scan_progress", scan_id=scan_record.id))
     return render_template("scan.html")
