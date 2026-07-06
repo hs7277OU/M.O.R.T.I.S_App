@@ -25,6 +25,13 @@ class Scan(db.Model):
     overall_rating = db.Column(db.String(20), default="Low")
     report_summary = db.Column(db.Text, default="")
 
+    # Real-time progress tracking (RE8): a background thread updates these
+    # while the scan runs, and the progress page polls them via JSON.
+    status = db.Column(db.String(20), default="running")  # running | completed | failed
+    modules_total = db.Column(db.Integer, default=0)
+    modules_done = db.Column(db.Integer, default=0)
+    current_module = db.Column(db.String(80), default="")
+
     findings = db.relationship(
         "Finding",
         backref="scan",
@@ -42,6 +49,12 @@ class Finding(db.Model):
     title = db.Column(db.String(200), nullable=False)
     severity = db.Column(db.String(20), nullable=False)
     score = db.Column(db.Integer, default=0)
+
+    # Optional CVSS v3.1 base score, stored alongside the internal severity
+    # band. Null when a finding has no assigned vector (e.g. Info items).
+    cvss_vector = db.Column(db.String(60), nullable=True)
+    cvss_score = db.Column(db.Float, nullable=True)
+    cvss_rating = db.Column(db.String(20), nullable=True)
 
     description = db.Column(db.Text, nullable=False)
     recommendation = db.Column(db.Text, nullable=False)
