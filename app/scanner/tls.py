@@ -11,7 +11,7 @@ def check_tls(url: str, timeout: int = 8) -> list[dict]:
         return [make_finding("SSL/TLS", "Target is not using HTTPS", "High",
                              "The target URL uses HTTP rather than HTTPS.",
                              "Enable HTTPS and redirect HTTP traffic to HTTPS.",
-                             cvss_vector="AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N")]
+                             cvss_vector="CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:L/VA:N/SC:N/SI:N/SA:N")]
 
     host = hostname_from_url(url)
     if not host:
@@ -30,7 +30,7 @@ def check_tls(url: str, timeout: int = 8) -> list[dict]:
         return [make_finding("SSL/TLS", "TLS handshake or certificate validation failed", "High",
                              str(exc),
                              "Check certificate validity, hostname matching, trust chain and TLS configuration.",
-                             cvss_vector="AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N")]
+                             cvss_vector="CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:L/VA:N/SC:N/SI:N/SA:N")]
 
     not_after = cert.get("notAfter")
     if not_after:
@@ -40,18 +40,18 @@ def check_tls(url: str, timeout: int = 8) -> list[dict]:
             findings.append(make_finding("SSL/TLS", "TLS certificate has expired", "Critical",
                                          f"The certificate expired {abs(days_left)} days ago.",
                                          "Renew and deploy a valid certificate immediately.",
-                                         cvss_vector="AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:N"))
+                                         cvss_vector="CVSS:4.0/AV:N/AC:H/AT:N/PR:N/UI:N/VC:L/VI:L/VA:N/SC:N/SI:N/SA:N"))
         elif days_left < 30:
             findings.append(make_finding("SSL/TLS", "TLS certificate expires soon", "Medium",
                                          f"The certificate expires in {days_left} days.",
                                          "Renew the certificate before expiry.",
-                                         cvss_vector="AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N"))
+                                         cvss_vector="CVSS:4.0/AV:N/AC:H/AT:N/PR:N/UI:N/VC:N/VI:N/VA:N/SC:N/SI:N/SA:N"))
 
     if tls_version in {"TLSv1", "TLSv1.1"}:
         findings.append(make_finding("SSL/TLS", f"Outdated TLS version supported: {tls_version}", "High",
                                      "An outdated TLS protocol was negotiated.",
                                      "Disable TLS 1.0/1.1 and require TLS 1.2+ or TLS 1.3.",
-                                     cvss_vector="AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:L/A:N"))
+                                     cvss_vector="CVSS:4.0/AV:N/AC:H/AT:N/PR:N/UI:N/VC:H/VI:L/VA:N/SC:N/SI:N/SA:N"))
 
     # Cipher strength check
     if cipher:
@@ -60,7 +60,7 @@ def check_tls(url: str, timeout: int = 8) -> list[dict]:
             findings.append(make_finding("SSL/TLS", f"Weak cipher negotiated: {cipher_name} ({secret_bits}-bit)", "Medium",
                                          "The server negotiated a cipher below 128-bit strength.",
                                          "Prefer modern AEAD ciphers (e.g. AES-GCM or ChaCha20) at 128-bit or higher.",
-                                         cvss_vector="AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:N/A:N"))
+                                         cvss_vector="CVSS:4.0/AV:N/AC:H/AT:N/PR:N/UI:N/VC:H/VI:N/VA:N/SC:N/SI:N/SA:N"))
 
     if not findings:
         detail = f"A valid TLS connection was established using {tls_version}"

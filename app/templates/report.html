@@ -171,7 +171,7 @@
           <span class="badge sev-{{ f.severity|lower }}">{{ f.severity }}</span>
         </div>
         <p class="module">
-          {{ f.module }}{% if f.cvss_score is not none %} &middot; CVSS v3.1 {{ '%.1f'|format(f.cvss_score) }} ({{ f.cvss_rating }}){% endif %}
+          {{ f.module }}{% if f.cvss_score is not none %} &middot; CVSS v4.0 {{ '%.1f'|format(f.cvss_score) }} ({{ f.cvss_rating }}){% endif %}
         </p>
         <p>{{ f.description }}</p>
         <p><strong>Recommendation:</strong> {{ f.recommendation }}</p>

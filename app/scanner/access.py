@@ -38,7 +38,7 @@ def check_access_control(url: str, timeout: int = 8) -> list[dict]:
                 "High",
                 f"{path} returned HTTP 200 without requiring authentication.",
                 "Restrict access, require authentication, or remove the resource.",
-                cvss_vector="AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+                cvss_vector="CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:N/VA:N/SC:N/SI:N/SA:N",
             ))
 
     if not findings:

@@ -186,7 +186,7 @@ def download_report(scan_id):
             f"Recommendation: {f.recommendation}",
         ])
         if f.cvss_score is not None:
-            lines.append(f"CVSS v3.1: {f.cvss_score} ({f.cvss_rating}) - {f.cvss_vector}")
+            lines.append(f"CVSS v4.0: {f.cvss_score} ({f.cvss_rating}) - {f.cvss_vector}")
         lines.append("")
     data = "\n".join(lines).encode("utf-8")
     return send_file(io.BytesIO(data), as_attachment=True, download_name=f"mortis_report_{scan_id}.txt", mimetype="text/plain")

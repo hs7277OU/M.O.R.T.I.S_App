@@ -4,23 +4,23 @@ from .risk import make_finding
 SECURITY_HEADERS = {
     "Content-Security-Policy": (
         "Helps reduce cross-site scripting and content injection risk.",
-        "AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:N",
+        "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:A/VC:L/VI:L/VA:N/SC:N/SI:N/SA:N",
     ),
     "Strict-Transport-Security": (
         "Forces browsers to use HTTPS for future requests.",
-        "AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:N",
+        "CVSS:4.0/AV:N/AC:H/AT:N/PR:N/UI:N/VC:L/VI:L/VA:N/SC:N/SI:N/SA:N",
     ),
     "X-Frame-Options": (
         "Helps prevent clickjacking by controlling iframe embedding.",
-        "AV:N/AC:H/PR:N/UI:R/S:U/C:N/I:L/A:N",
+        "CVSS:4.0/AV:N/AC:H/AT:N/PR:N/UI:A/VC:N/VI:L/VA:N/SC:N/SI:N/SA:N",
     ),
     "X-Content-Type-Options": (
         "Prevents MIME-type sniffing when set to nosniff.",
-        "AV:N/AC:H/PR:N/UI:R/S:U/C:L/I:N/A:N",
+        "CVSS:4.0/AV:N/AC:H/AT:N/PR:N/UI:A/VC:L/VI:N/VA:N/SC:N/SI:N/SA:N",
     ),
     "Referrer-Policy": (
         "Controls how much referrer information is shared.",
-        "AV:N/AC:H/PR:N/UI:R/S:U/C:L/I:N/A:N",
+        "CVSS:4.0/AV:N/AC:H/AT:N/PR:N/UI:A/VC:L/VI:N/VA:N/SC:N/SI:N/SA:N",
     ),
 }
 
@@ -51,6 +51,6 @@ def check_security_headers(url: str, timeout: int = 8) -> list[dict]:
             "Low",
             f"The Server header is present: {server}. This can reveal platform details to attackers.",
             "Reduce or remove version/banner information where possible.",
-            cvss_vector="AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+            cvss_vector="CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:N/SC:N/SI:N/SA:N",
         ))
     return findings

@@ -4,5 +4,6 @@ Flask-WTF==1.2.1
 requests==2.32.3
 beautifulsoup4==4.12.3
 anthropic>=0.116.0
+cvss>=3.0
 python-dotenv==1.0.1
 pytest==8.3.2

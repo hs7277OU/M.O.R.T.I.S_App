@@ -50,7 +50,7 @@ class Finding(db.Model):
     severity = db.Column(db.String(20), nullable=False)
     score = db.Column(db.Integer, default=0)
 
-    # Optional CVSS v3.1 base score; null for findings with no vector.
+    # Optional CVSS v4.0 base score; null for findings with no vector.
     cvss_vector = db.Column(db.String(60), nullable=True)
     cvss_score = db.Column(db.Float, nullable=True)
     cvss_rating = db.Column(db.String(20), nullable=True)

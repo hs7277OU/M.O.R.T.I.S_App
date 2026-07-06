@@ -43,15 +43,15 @@ def check_cookies(url: str, timeout: int = 8) -> list[dict]:
             findings.append(make_finding("Cookie Audit", f"Cookie {name} missing HttpOnly", "Medium",
                                          "A cookie was set without the HttpOnly flag, increasing script access risk.",
                                          "Set HttpOnly on session or sensitive cookies.",
-                                         cvss_vector="AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:N/A:N"))
+                                         cvss_vector="CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:A/VC:L/VI:N/VA:N/SC:N/SI:N/SA:N"))
         if url.startswith("https://") and "secure" not in lower:
             findings.append(make_finding("Cookie Audit", f"Cookie {name} missing Secure", "Medium",
                                          "A cookie on an HTTPS site was set without Secure.",
                                          "Set Secure so the cookie is only sent over HTTPS.",
-                                         cvss_vector="AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:N/A:N"))
+                                         cvss_vector="CVSS:4.0/AV:N/AC:H/AT:N/PR:N/UI:N/VC:L/VI:N/VA:N/SC:N/SI:N/SA:N"))
         if "samesite" not in lower:
             findings.append(make_finding("Cookie Audit", f"Cookie {name} missing SameSite", "Low",
                                          "A cookie was set without a SameSite attribute.",
                                          "Set SameSite=Lax or SameSite=Strict where appropriate.",
-                                         cvss_vector="AV:N/AC:H/PR:N/UI:R/S:U/C:N/I:L/A:N"))
+                                         cvss_vector="CVSS:4.0/AV:N/AC:H/AT:N/PR:N/UI:A/VC:N/VI:L/VA:N/SC:N/SI:N/SA:N"))
     return findings

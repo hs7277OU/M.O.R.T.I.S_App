@@ -46,7 +46,7 @@ def check_basic_injection(url: str, timeout: int = 8) -> list[dict]:
                 findings.append(make_finding("Injection", "Possible SQL error disclosure", "High",
                                              "A basic SQL-style payload appeared to trigger database error text.",
                                              "Use parameterised queries, server-side validation and generic error handling.",
-                                             cvss_vector="AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N"))
+                                             cvss_vector="CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:L/VA:N/SC:N/SI:N/SA:N"))
         except requests.RequestException:
             pass
 
@@ -63,7 +63,7 @@ def check_basic_injection(url: str, timeout: int = 8) -> list[dict]:
                     findings.append(make_finding("Injection", "Possible reflected XSS", "High",
                                                  "User input was reflected in the response without HTML-encoding.",
                                                  "HTML-encode all output and validate input server-side.",
-                                                 cvss_vector="AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N"))
+                                                 cvss_vector="CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:A/VC:N/VI:N/VA:N/SC:L/SI:L/SA:N"))
             except requests.RequestException:
                 pass
 
