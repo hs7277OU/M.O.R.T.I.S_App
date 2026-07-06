@@ -18,9 +18,23 @@
       <tr>
         <td>{{ scan.target_url }}</td>
         <td>{{ scan.created_at.strftime('%d %b %Y %H:%M') }}</td>
-        <td><span class="badge {{ scan.overall_rating|lower }}">{{ scan.overall_rating }}</span></td>
+        <td>
+          {% if scan.status == "running" %}
+            <span class="badge info">Running…</span>
+          {% elif scan.status == "failed" %}
+            <span class="badge critical">Failed</span>
+          {% else %}
+            <span class="badge {{ scan.overall_rating|lower }}">{{ scan.overall_rating }}</span>
+          {% endif %}
+        </td>
         <td>{{ scan.overall_score }}</td>
-        <td><a href="{{ url_for('main.results', scan_id=scan.id) }}">View</a></td>
+        <td>
+          {% if scan.status == "running" %}
+            <a href="{{ url_for('main.scan_progress', scan_id=scan.id) }}">View progress</a>
+          {% else %}
+            <a href="{{ url_for('main.results', scan_id=scan.id) }}">View</a>
+          {% endif %}
+        </td>
       </tr>
     {% endfor %}
     </tbody>

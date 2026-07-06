@@ -4,8 +4,23 @@
   <h1>New Authorised Scan</h1>
   <p class="warning">Only scan systems you own or have explicit permission to test. Use DVWA, Juice Shop, or local test apps for coursework evidence.</p>
   <form method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
     <label>Target URL</label>
     <input name="target_url" placeholder="https://example.com" required>
+    <label>Scan depth</label>
+    <select name="depth">
+      <option value="standard" selected>Standard (all checks)</option>
+      <option value="quick">Quick (headers, TLS, cookies, CORS only)</option>
+    </select>
+    <fieldset>
+      <legend>Modules to run</legend>
+      <label class="checkbox"><input type="checkbox" name="modules" value="headers" checked> Security headers</label>
+      <label class="checkbox"><input type="checkbox" name="modules" value="tls" checked> SSL/TLS</label>
+      <label class="checkbox"><input type="checkbox" name="modules" value="cookies" checked> Cookies</label>
+      <label class="checkbox"><input type="checkbox" name="modules" value="cors" checked> CORS</label>
+      <label class="checkbox"><input type="checkbox" name="modules" value="access" checked> Access control</label>
+      <label class="checkbox"><input type="checkbox" name="modules" value="injection" checked> SQL injection &amp; XSS</label>
+    </fieldset>
     <label class="checkbox"><input type="checkbox" name="authorised" required> I confirm I am authorised to test this target.</label>
     <button type="submit">Run Baseline Scan</button>
   </form>

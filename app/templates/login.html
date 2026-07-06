@@ -4,6 +4,7 @@
   <h1>Login</h1>
   <p class="muted">Default Prototype account: <strong>admin</strong> / <strong>mortis123</strong></p>
   <form method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
     <label>Username</label>
     <input name="username" required>
     <label>Password</label>

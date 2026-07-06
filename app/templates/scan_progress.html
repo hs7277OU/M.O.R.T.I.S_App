@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="card narrow">
+  <h1>Scanning {{ scan.target_url }}</h1>
+  <p class="muted">MORTIS is running the selected checks. This page updates automatically.</p>
+
+  <div class="progress-track">
+    <div class="progress-fill" id="progress-fill" style="width: 0%;"></div>
+  </div>
+  <p id="progress-label">Starting…</p>
+
+  <p id="progress-error" class="alert error" style="display:none;"></p>
+</section>
+
+<script>
+(function () {
+  const statusUrl = "{{ url_for('main.scan_status', scan_id=scan.id) }}";
+  const fill = document.getElementById("progress-fill");
+  const label = document.getElementById("progress-label");
+  const errorBox = document.getElementById("progress-error");
+
+  function poll() {
+    fetch(statusUrl)
+      .then((response) => response.json())
+      .then((data) => {
+        const total = data.modules_total || 0;
+        const done = data.modules_done || 0;
+        const percent = total > 0 ? Math.round((done / total) * 100) : 0;
+        fill.style.width = percent + "%";
+
+        if (data.status === "completed") {
+          label.textContent = "Scan complete. Redirecting…";
+          window.location.href = data.results_url;
+          return;
+        }
+        if (data.status === "failed") {
+          label.textContent = "Scan failed.";
+          errorBox.textContent = "The scan could not finish. Redirecting to the error details…";
+          errorBox.style.display = "block";
+          window.location.href = data.results_url;
+          return;
+        }
+
+        label.textContent = data.current_module
+          ? `Running module: ${data.current_module} (${done}/${total})`
+          : `${done}/${total} modules complete`;
+        setTimeout(poll, 1000);
+      })
+      .catch(() => setTimeout(poll, 1500));
+  }
+
+  poll();
+})();
+</script>
+{% endblock %}

@@ -15,6 +15,7 @@
   <h2>AI-Style Executive Summary</h2>
   <pre class="summary">{{ scan.report_summary }}</pre>
   <a class="button secondary" href="{{ url_for('main.download_report', scan_id=scan.id) }}">Download TXT Report</a>
+  <a class="button secondary" href="{{ url_for('main.download_report_html', scan_id=scan.id) }}">Download HTML Report</a>
 </section>
 
 <section class="card">
@@ -24,10 +25,14 @@
       <div class="finding-head">
         <h3>{{ f.title }}</h3>
         <span class="badge {{ f.severity|lower }}">{{ f.severity }}</span>
+        {% if f.cvss_score is not none %}
+          <span class="badge cvss" title="{{ f.cvss_vector }}">CVSS {{ "%.1f"|format(f.cvss_score) }} ({{ f.cvss_rating }})</span>
+        {% endif %}
       </div>
       <p><strong>Module:</strong> {{ f.module }}</p>
       <p>{{ f.description }}</p>
       <p><strong>Recommendation:</strong> {{ f.recommendation }}</p>
+      {% if f.cvss_vector %}<p class="muted"><strong>CVSS v3.1 vector:</strong> {{ f.cvss_vector }}</p>{% endif %}
     </article>
   {% endfor %}
 </section>
