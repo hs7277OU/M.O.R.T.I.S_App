@@ -16,9 +16,12 @@ Mapped Open-Route Threat Identification System: a first working Flask prototype.
 - Cookie flag audit
 - CORS misconfiguration check
 - Basic non-destructive injection smoke test
-- OWASP-style severity labels and risk score
-- AI-style report scaffold
-- Downloadable TXT scan report
+- OWASP-style severity labels and risk score, plus real CVSS v3.1 base scores
+- AI-style report scaffold (live Claude summary when `ANTHROPIC_API_KEY` is set)
+- Downloadable TXT and HTML scan reports
+- Configurable scan depth and per-module toggles
+- Real-time scan progress bar
+
 
 ## Default login
 
