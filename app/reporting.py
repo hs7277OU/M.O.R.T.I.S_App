@@ -72,13 +72,22 @@ def _llm_summary(target_url: str, findings: list[dict], overall_rating: str, api
     )
 
 
-def generate_report(target_url: str, findings: list[dict], overall_rating: str) -> str:
-    """Return an executive summary, using Claude when configured, else local text."""
+def generate_report_with_source(target_url: str, findings: list[dict],
+                                overall_rating: str) -> tuple[str, str]:
+    """Return (summary, source), where source is "api" when the LLM produced the
+    summary or "offline" when the local fallback was used.
+    """
     api_key = os.environ.get("ANTHROPIC_API_KEY")
     if not api_key:
-        return _local_summary(target_url, findings, overall_rating)
+        return _local_summary(target_url, findings, overall_rating), "offline"
     try:
-        return _llm_summary(target_url, findings, overall_rating, api_key)
+        return _llm_summary(target_url, findings, overall_rating, api_key), "api"
     except Exception:
         # Graceful degradation: never let a reporting/API error break a scan.
-        return _local_summary(target_url, findings, overall_rating)
+        return _local_summary(target_url, findings, overall_rating), "offline"
+
+
+def generate_report(target_url: str, findings: list[dict], overall_rating: str) -> str:
+    """Return just the executive summary text (used where the source is not needed)."""
+    summary, _ = generate_report_with_source(target_url, findings, overall_rating)
+    return summary

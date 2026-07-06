@@ -5,7 +5,7 @@ from markupsafe import escape
 from .models import db, User, Scan, Finding
 from .scanner.engine import run_scan
 from .scanner.utils import normalise_url
-from .reporting import generate_report
+from .reporting import generate_report_with_source
 import io
 
 bp = Blueprint("main", __name__)
@@ -66,12 +66,14 @@ def _execute_scan(app, scan_id, target_url, enabled_modules, depth):
 
         try:
             result = run_scan(target_url, enabled_modules=enabled_modules, depth=depth, on_progress=on_progress)
-            report_summary = generate_report(result["target_url"], result["findings"], result["overall_rating"])
+            report_summary, report_source = generate_report_with_source(
+                result["target_url"], result["findings"], result["overall_rating"])
 
             scan_record = db.session.get(Scan, scan_id)
             scan_record.overall_score = result["overall_score"]
             scan_record.overall_rating = result["overall_rating"]
             scan_record.report_summary = report_summary
+            scan_record.report_source = report_source
             scan_record.status = "completed"
             for f in result["findings"]:
                 db.session.add(Finding(scan_id=scan_record.id, **f))

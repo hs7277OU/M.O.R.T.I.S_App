@@ -24,6 +24,7 @@ class Scan(db.Model):
     overall_score = db.Column(db.Integer, default=0)
     overall_rating = db.Column(db.String(20), default="Low")
     report_summary = db.Column(db.Text, default="")
+    report_source = db.Column(db.String(20), default="")  # "api" | "offline" | ""
 
     # Progress fields updated by the background scan thread and polled by the UI.
     status = db.Column(db.String(20), default="running")  # running | completed | failed

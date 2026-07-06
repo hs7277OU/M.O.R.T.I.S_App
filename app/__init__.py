@@ -4,6 +4,7 @@ import secrets
 from dotenv import load_dotenv
 from flask import Flask
 from flask_wtf import CSRFProtect
+from sqlalchemy import inspect, text
 
 from .models import db, User
 
@@ -11,6 +12,16 @@ from .models import db, User
 load_dotenv()
 
 csrf = CSRFProtect()
+
+
+def _ensure_scan_columns():
+    """Add columns introduced after a database was first created, so existing
+    mortis.sqlite3 files keep working without being deleted.
+    """
+    existing = {col["name"] for col in inspect(db.engine).get_columns("scan")}
+    if "report_source" not in existing:
+        db.session.execute(text("ALTER TABLE scan ADD COLUMN report_source VARCHAR(20) DEFAULT ''"))
+        db.session.commit()
 
 
 def create_app():
@@ -29,6 +40,7 @@ def create_app():
 
     with app.app_context():
         db.create_all()
+        _ensure_scan_columns()
         if not User.query.filter_by(username="admin").first():
             admin_password = os.environ.get("MORTIS_ADMIN_PW", "mortis123")
             user = User(username="admin")

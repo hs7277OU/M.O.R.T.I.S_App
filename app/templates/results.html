@@ -13,7 +13,13 @@
 </section>
 
 <section class="card">
-  <h2>AI-Style Executive Summary</h2>
+  <h2>Executive Summary
+    {% if scan.report_source == 'api' %}
+      <span class="badge cvss">AI-generated (Claude)</span>
+    {% elif scan.report_source == 'offline' %}
+      <span class="badge info">Offline summary</span>
+    {% endif %}
+  </h2>
   <pre class="summary">{{ scan.report_summary }}</pre>
   <a class="button secondary" href="{{ url_for('main.download_report', scan_id=scan.id) }}">Download TXT Report</a>
   <a class="button secondary" href="{{ url_for('main.download_report_html', scan_id=scan.id) }}">Download HTML Report</a>
