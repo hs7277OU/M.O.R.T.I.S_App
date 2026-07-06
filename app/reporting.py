@@ -113,10 +113,12 @@ def _llm_summary(target_url: str, findings: list[dict], overall_rating: str,
 
     finding_lines = "\n".join(_line(f) for f in findings) or "- No findings recorded."
 
+    # Technical summaries are longer, so give them more output headroom to avoid
+    # truncation. Either default can be overridden with MORTIS_LLM_MAX_TOKENS.
+    default_max_tokens = "4000" if technical else "2000"
     message = client.messages.create(
         model=os.environ.get("MORTIS_LLM_MODEL", "claude-sonnet-5"),
-        # Headroom so the summary + remediation steps are not truncated mid-sentence.
-        max_tokens=int(os.environ.get("MORTIS_LLM_MAX_TOKENS", "2000")),
+        max_tokens=int(os.environ.get("MORTIS_LLM_MAX_TOKENS", default_max_tokens)),
         system=_SYSTEM_TECHNICAL if technical else _SYSTEM_BASIC,
         messages=[{
             "role": "user",
