@@ -48,7 +48,7 @@ def _llm_summary(target_url: str, findings: list[dict], overall_rating: str, api
     ) or "- No findings recorded."
 
     message = client.messages.create(
-        model=os.environ.get("MORTIS_LLM_MODEL", "claude-sonnet-4-5"),
+        model=os.environ.get("MORTIS_LLM_MODEL", "claude-sonnet-5"),
         max_tokens=800,
         system=(
             "You are a security report writer for a tool called MORTIS. Turn the "

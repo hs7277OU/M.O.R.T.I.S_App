@@ -1,10 +1,14 @@
 import os
 import secrets
 
+from dotenv import load_dotenv
 from flask import Flask
 from flask_wtf import CSRFProtect
 
 from .models import db, User
+
+# Load variables from a local .env file (e.g. ANTHROPIC_API_KEY) if present.
+load_dotenv()
 
 csrf = CSRFProtect()
 

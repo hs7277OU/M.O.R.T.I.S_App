@@ -1,0 +1,15 @@
+# Secrets / environment
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Flask instance data (local SQLite database, etc.)
+instance/
+
+# Test / tooling caches
+.pytest_cache/
+.mypy_cache/
