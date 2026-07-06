@@ -40,6 +40,11 @@
     {% endfor %}
     </tbody>
   </table>
+  <form method="post" action="{{ url_for('main.clear_history') }}"
+        onsubmit="return confirm('Are you sure you want to clear your scan history? This permanently deletes all scans and cannot be undone.');">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <button type="submit" class="secondary">Clear scan history</button>
+  </form>
   {% else %}
     <p class="muted">No scans yet. Run your first authorised scan.</p>
   {% endif %}

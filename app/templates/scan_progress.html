@@ -33,9 +33,6 @@
       .then((data) => {
         const total = data.modules_total || 0;
         const done = data.modules_done || 0;
-        const percent = total > 0 ? Math.round((done / total) * 100) : 0;
-        fill.style.width = percent + "%";
-        bar.setAttribute("aria-valuenow", percent);
 
         if (data.status === "completed") {
           label.textContent = "Scan complete. Redirecting…";
@@ -52,15 +49,25 @@
         if (data.status === "reporting") {
           fill.style.width = "100%";
           bar.setAttribute("aria-valuenow", 100);
-          label.textContent = "Scan complete — generating AI report…";
-          setTimeout(poll, 1000);
+          label.textContent = "Scan complete - generating AI report…";
+          setTimeout(poll, 400);
           return;
         }
 
-        label.textContent = data.current_module
-          ? `Running module: ${data.current_module} (${done}/${total})`
-          : `${done}/${total} modules complete`;
-        setTimeout(poll, 1000);
+        if (data.current_module) {
+          // 1-based position: the module currently running is "current of total".
+          const current = total > 0 ? Math.min(done + 1, total) : 0;
+          const percent = total > 0 ? Math.round((current / total) * 100) : 0;
+          fill.style.width = percent + "%";
+          bar.setAttribute("aria-valuenow", percent);
+          label.textContent = `Running module: ${data.current_module} (${current}/${total})`;
+        } else {
+          const percent = total > 0 ? Math.round((done / total) * 100) : 0;
+          fill.style.width = percent + "%";
+          bar.setAttribute("aria-valuenow", percent);
+          label.textContent = `${done}/${total} modules complete`;
+        }
+        setTimeout(poll, 400);
       })
       .catch(() => setTimeout(poll, 1500));
   }

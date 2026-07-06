@@ -52,6 +52,16 @@ def dashboard():
     scans = Scan.query.order_by(Scan.created_at.desc()).limit(10).all()
     return render_template("dashboard.html", scans=scans)
 
+@bp.route("/history/clear", methods=["POST"])
+@login_required
+def clear_history():
+    # Remove all findings first, then scans (findings reference scans).
+    Finding.query.delete()
+    Scan.query.delete()
+    db.session.commit()
+    flash("Scan history cleared.", "success")
+    return redirect(url_for("main.dashboard"))
+
 def _execute_scan(app, scan_id, target_url, enabled_modules, depth):
     """Run the scan in a background thread, updating the Scan row's progress
     fields as each module completes so the progress page can poll for status.
