@@ -19,7 +19,7 @@
 
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
+  font-family: "Aptos", "Aptos Display", "Segoe UI", Arial, sans-serif;
   color: var(--text);
 
   background:
@@ -27,6 +27,11 @@ body {
     radial-gradient(circle at bottom right, rgba(239, 68, 68, 0.34), transparent 38%),
     linear-gradient(135deg, var(--bg-green) 0%, var(--bg) 48%, var(--bg-red) 100%);
   background-attachment: fixed;
+}
+
+/* Form controls and <pre> don't inherit the body font by default. */
+button, input, select, textarea, .summary {
+  font-family: inherit;
 }
 
 h1, h2, h3 {
